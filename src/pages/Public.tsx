@@ -21,7 +21,7 @@ const Public = () => {
                             component="div"
                             sx={{ flexGrow: 1, ml: 2, fontFamily: "-apple-system" }}
                         >
-                            Alpaca Markets Broker Partner Name
+                            Alpaca Broker Partner Name
                         </Typography>
                         <Button
                             variant="outlined"

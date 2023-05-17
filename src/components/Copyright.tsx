@@ -11,7 +11,7 @@ export default function Copyright() {
         >
             {"Copyright © "}
             <Link color="inherit" href="/">
-                Alpaca Markets Broker Partner Name
+                Alpaca Broker Partner Name
             </Link>{" "}
             {new Date().getFullYear()}
             {"."}
