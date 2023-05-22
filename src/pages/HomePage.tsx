@@ -1,42 +1,34 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import SearchAppBar from "../components/SearchAppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
-import { useAssetBySymbolQuery, useSymbolsQuery } from "../services/asset/assetsApi";
-import AssetCard from "../components/AssetCard";
-import { useState } from "react";
+import { useAccountTradingQuery } from "../services/account/accountsApi";
+import BalanceCard from "../components/BalanceCard";
 
 
 export default function HomePage() {
 
-    const [searchQuery, setSearchQuery] = useState<string | null>(null);
-    const { data: symbols } = useSymbolsQuery();
+    const { data: accountBalances } = useAccountTradingQuery();
 
-    const filterSymbols = (query: string | null, symbols: string[]) => {
-        if (!query) {
-            return [];
-        } else if (!query && symbols) {
-            return symbols;
-        } else {
-            return symbols.filter((symbol) => symbol.includes(query.toUpperCase()));
-        }
-    };
-
-    const searchedSymbols = filterSymbols(searchQuery, symbols!);
-    const { data: asset, isLoading } = useAssetBySymbolQuery(searchedSymbols[0]);
 
     return (
         <Box>
-            {symbols !== undefined && <SearchAppBar searchQuery={searchQuery!} filteredResults={searchedSymbols} setSearchQuery={setSearchQuery} options={symbols} />}
+            <SearchAppBar />
             <Container component="main" maxWidth="lg">
                 <CssBaseline />
-                <Box>
-                    <Typography variant="h4" sx={{ flexGrow: 1, fontFamily: "-apple-system" }}>
-                        Logged in
-                    </Typography>
-
-                    {!isLoading && asset !== undefined && <AssetCard asset={asset} />}
+                <Box sx={{ marginTop: 5 }}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={4}>
+                            {accountBalances && <BalanceCard description="Equity" value={accountBalances.equity} />}
+                        </Grid>
+                        <Grid item xs={4}>
+                            {accountBalances && <BalanceCard description="Cash" value={accountBalances.cash} />}
+                        </Grid>
+                        <Grid item xs={4}>
+                            {accountBalances && <BalanceCard description="Buying Power" value={accountBalances.buying_power} />}
+                        </Grid>
+                    </Grid>
                 </Box>
             </Container>
         </Box>

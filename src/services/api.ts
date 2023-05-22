@@ -24,9 +24,6 @@ export const handleError = (err: any) => {
     if (err.status === 401) {
         return "Invalid authentication credentials. Try to login again."
     }
-    else if (err.status === 422 && err.data.exception === 'AssertionError: Market must be open to do an initial investment.') {
-        return "The market is closed."
-    }
     else if (err.status === 422) {
         return "There is an error in the request parameters."
     }
@@ -37,6 +34,6 @@ export const handleError = (err: any) => {
 
 export const api = createApi({
     baseQuery: baseQuery,
-    tagTypes: ["Strategies", "Account", "PortfolioHistory"],
+    tagTypes: ["Assets", "AccountTrading", "PortfolioHistory"],
     endpoints: builder => ({})
 })

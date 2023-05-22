@@ -24,6 +24,7 @@ export const assetsApi = api.injectEndpoints({
             query: (symbol) => ({
                 url: `assets/symbols/${symbol}`,
                 method: "GET",
+                providesTags: ["Assets"],
             })
         }),
     }),
