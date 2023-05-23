@@ -1,24 +1,25 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import SearchAppBar from "../components/SearchAppBar";
 import CssBaseline from "@mui/material/CssBaseline";
-import Container from "@mui/material/Container";
-import { useAccountTradingQuery } from "../services/account/accountsApi";
+import { useAccountTradingQuery, usePortfolioHistoryQuery } from "../services/accountsApi";
 import BalanceCard from "../components/BalanceCard";
+import Chart from "react-google-charts";
+import { lineChartOptions } from "../theme";
+import FundingButtons from "../components/FundingButtons";
+import BasePage from "./BasePage";
 
 
 export default function HomePage() {
 
     const { data: accountBalances } = useAccountTradingQuery();
-
+    const { data: portfolioHistory } = usePortfolioHistoryQuery();
 
     return (
-        <Box>
-            <SearchAppBar />
-            <Container component="main" maxWidth="lg">
+        <BasePage>
+            <Box sx={{ ml: 5, }}>
                 <CssBaseline />
-                <Box sx={{ marginTop: 5 }}>
-                    <Grid container spacing={3}>
+                <Box>
+                    <Grid container spacing={5}>
                         <Grid item xs={4}>
                             {accountBalances && <BalanceCard description="Equity" value={accountBalances.equity} />}
                         </Grid>
@@ -30,7 +31,18 @@ export default function HomePage() {
                         </Grid>
                     </Grid>
                 </Box>
-            </Container>
-        </Box>
+                <FundingButtons />
+                {portfolioHistory && <Chart
+                    chartType="LineChart"
+                    width="100%"
+                    height="400px"
+                    data={portfolioHistory}
+                    options={{
+                        title: "Portfolio History",
+                        ...lineChartOptions,
+                    }}
+                />}
+            </Box>
+        </BasePage>
     );
 }

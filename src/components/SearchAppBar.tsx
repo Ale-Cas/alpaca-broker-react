@@ -1,16 +1,11 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import MenuIcon from '@mui/icons-material/Menu';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
-import { Asset, useAssetsQuery } from '../services/asset/assetsApi';
+import { Asset, useAssetsQuery } from '../services/assetsApi';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
     flex: 1,
@@ -52,6 +47,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 
 const SearchAppBar = () => {
     const { data: assets } = useAssetsQuery();
+    const navigate = useNavigate();
     const [inputValue, setInputValue] = useState('');
     const [filteredAssets, setFilteredAssets] = useState<Asset[]>([]);
 
@@ -100,63 +96,44 @@ const SearchAppBar = () => {
             setFilteredAssets(newFilteredAssets);
         }
     };
+
+    const handleSelect = (event: React.ChangeEvent<{}>, newValue: Asset | null) => {
+        // navigate to the symbol absolute path
+        newValue && navigate("/" + newValue.symbol);
+    }
+
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{
-                            flexGrow: 1,
-                            display: { xs: 'none', sm: 'block' }
-                        }}
-                    >
-                        Alpaca Partner Name
-                    </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <Autocomplete<Asset>
-                            options={filteredAssets}
-                            getOptionLabel={(option) => option.name}
-                            inputValue={inputValue}
-                            onInputChange={handleInputChange}
-                            renderOption={(props, option, { inputValue }) => (
-                                <li {...props} key={option.symbol}>
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: option.name.replace(
-                                                new RegExp(`(${inputValue})`, "i"),
-                                                "<strong>$1</strong>"
-                                            ),
-                                        }}
-                                    />
-                                </li>
-                            )}
-                            renderInput={(params) => (
-                                <StyledTextField
-                                    {...params}
-                                    placeholder="Search"
-                                    inputProps={{ ...params.inputProps, 'aria-label': 'search' }}
-                                />
-                            )}
+        <Search>
+            <SearchIconWrapper>
+                <SearchIcon />
+            </SearchIconWrapper>
+            <Autocomplete<Asset>
+                options={filteredAssets}
+                getOptionLabel={(option) => option.name}
+                inputValue={inputValue}
+                onInputChange={handleInputChange}
+                renderOption={(props, option, { inputValue }) => (
+                    <li {...props} key={option.symbol}>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: option.name.replace(
+                                    new RegExp(`(${inputValue})`, "i"),
+                                    "<strong>$1</strong>"
+                                ),
+                            }}
                         />
-                    </Search>
-                </Toolbar>
-            </AppBar>
-        </Box>
+                    </li>
+                )}
+                renderInput={(params) => (
+                    <StyledTextField
+                        {...params}
+                        placeholder="Search"
+                        inputProps={{ ...params.inputProps, 'aria-label': 'search' }}
+                    />
+                )}
+                onChange={handleSelect}
+            />
+        </Search>
     );
 };
 

@@ -34,6 +34,12 @@ export const handleError = (err: any) => {
 
 export const api = createApi({
     baseQuery: baseQuery,
-    tagTypes: ["Assets", "AccountTrading", "PortfolioHistory"],
+    tagTypes: [
+        "AccountTrading",
+        "Activities",
+        "Assets",
+        "Bars",
+        "PortfolioHistory",
+    ],
     endpoints: builder => ({})
 })

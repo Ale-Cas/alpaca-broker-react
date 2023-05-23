@@ -20,18 +20,20 @@ interface OutputUser {
     email: string;
 }
 
+const router = "users/"
+
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation<LoginResponse, LoginRequest>({
             query: (credentials) => ({
-                url: "users/login",
+                url: router + "login",
                 method: "POST",
                 body: credentials
             })
         }),
         register: builder.mutation<OutputUser, InputUser>({
             query: (inputUser) => ({
-                url: "users/register",
+                url: router + "register",
                 method: "POST",
                 body: inputUser
             })

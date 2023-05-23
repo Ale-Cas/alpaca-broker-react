@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { Asset } from "../services/asset/assetsApi";
+import { Asset } from "../services/assetsApi";
 
 export interface AssetProps {
     asset: Asset

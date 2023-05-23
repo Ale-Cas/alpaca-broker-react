@@ -44,6 +44,10 @@ export const lineChartOptions = {
         color: "white",
         opacity: 0.8,
     },
+    legend: {
+        position: "bottom"
+    },
+    colors: ["yellow", "green", "red",],
     vAxis: {
         textStyle: {
             color: "white",

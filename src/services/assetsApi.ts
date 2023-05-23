@@ -1,4 +1,4 @@
-import { api } from "../api";
+import { api } from "./api";
 
 export interface Asset {
     exchange: string;
@@ -6,23 +6,25 @@ export interface Asset {
     name: string;
 }
 
+const router = "assets/"
+
 export const assetsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         assets: builder.query<Asset[], void>({
             query: () => ({
-                url: "assets/",
+                url: router,
                 method: "GET",
             })
         }),
         symbols: builder.query<string[], void>({
             query: () => ({
-                url: "assets/symbols",
+                url: router + "symbols",
                 method: "GET",
             })
         }),
         assetBySymbol: builder.query<Asset, string>({
             query: (symbol) => ({
-                url: `assets/symbols/${symbol}`,
+                url: router + `symbols/${symbol}`,
                 method: "GET",
                 providesTags: ["Assets"],
             })
