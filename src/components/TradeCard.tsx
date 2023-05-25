@@ -52,8 +52,8 @@ export default function TradeCard() {
         console.log(orderRequest)
         const symbol: string = orderRequest.get("symbol")!.toString();
         const side: string = buyChecked ? "buy" : "sell";
-        const type: string = orderRequest.get("type")!.toString();
-        const time_in_force: string = orderRequest.get("time_in_force")!.toString();
+        const type: string = orderRequest.get("type")!.toString().toLowerCase();
+        const time_in_force: string = orderRequest.get("time_in_force")!.toString().toLowerCase();
         const qty: number | undefined = qtyChecked ? Number(orderRequest.get("qty")!) : undefined;
         const notional: number | undefined = notionalChecked ? Number(orderRequest.get("notional")!) : undefined;
         try {
