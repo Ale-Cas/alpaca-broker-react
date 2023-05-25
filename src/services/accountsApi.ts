@@ -8,10 +8,9 @@ export interface AccountTrading {
 }
 
 export interface Activity {
-    activity_type: string;
+    activity_name: string;
     date: string;
-    net_amount: number;
-
+    amount: number;
 }
 
 const router = "accounts/"

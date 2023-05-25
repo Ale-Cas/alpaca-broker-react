@@ -45,7 +45,7 @@ export const lineChartOptions = {
         opacity: 0.8,
     },
     legend: {
-        position: "bottom"
+        position: "none"
     },
     colors: ["yellow", "green", "red",],
     vAxis: {
@@ -60,6 +60,11 @@ export const lineChartOptions = {
         slantedText: true,
     },
 };
+
+export const lineChartSize = {
+    width: "100%",
+    height: "400px",
+}
 
 export const pieChartOptions = {
     is3D: true,

@@ -2,10 +2,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
 
 export interface BalanceCardProps {
     description: string;
-    value: number;
+    value: number | undefined;
 }
 
 export default function BalanceCard({ description, value }: BalanceCardProps) {
@@ -18,7 +19,7 @@ export default function BalanceCard({ description, value }: BalanceCardProps) {
                         {description}
                     </Typography>
                     <Typography variant="h4" sx={{ flexGrow: 1, fontFamily: "-apple-system" }}>
-                        $ {value}
+                        {value ? `$ ${value.toFixed(2)}` : <Skeleton variant="rounded" width={100} />}
                     </Typography>
                 </CardContent>
             </Card>
