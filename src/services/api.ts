@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from './store';
+import { toTitleCase } from '../utils/stringUtils';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://127.0.0.1:8000',
@@ -27,8 +28,11 @@ export const handleError = (err: any) => {
     else if (err.status === 422) {
         return "There is an error in the request parameters."
     }
+    else if (err.status === 403) {
+        return toTitleCase(err.data)
+    }
     else {
-        return "There was an unknown error during the request."
+        return err.data || "There was an unknown error during the request."
     }
 }
 
@@ -40,6 +44,7 @@ export const api = createApi({
         "Assets",
         "Bars",
         "PortfolioHistory",
+        "Orders"
     ],
     endpoints: builder => ({})
 })

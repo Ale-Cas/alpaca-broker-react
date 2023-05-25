@@ -11,7 +11,8 @@ export interface OrderRequest {
 
 export interface OrderResponse extends OrderRequest {
     id: string;
-    submitted_at: string;
+    created_at: string;
+    filled_at: string;
     status: string;
 }
 
@@ -25,9 +26,16 @@ export const ordersApi = api.injectEndpoints({
                 method: "POST",
                 body: orderRequest,
             }),
-            invalidatesTags: ["AccountTrading", "PortfolioHistory", "Activities"]
+            invalidatesTags: ["AccountTrading", "PortfolioHistory", "Activities", "Orders"]
+        }),
+        getOrders: builder.query<OrderResponse[], void>({
+            query: () => ({
+                url: router,
+                method: "GET",
+            }),
+            providesTags: ["Orders"]
         }),
     }),
 });
 
-export const { useOrderMutation } = ordersApi;
+export const { useOrderMutation, useGetOrdersQuery } = ordersApi;

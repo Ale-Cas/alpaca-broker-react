@@ -47,6 +47,8 @@ export default function TradeCard() {
     const [createOrder] = useOrderMutation();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        setSuccessMessage(null);
+        setErrorMessage(null);
         event.preventDefault();
         const orderRequest = new FormData(event.currentTarget);
         console.log(orderRequest)
@@ -56,22 +58,24 @@ export default function TradeCard() {
         const time_in_force: string = orderRequest.get("time_in_force")!.toString().toLowerCase();
         const qty: number | undefined = qtyChecked ? Number(orderRequest.get("qty")!) : undefined;
         const notional: number | undefined = notionalChecked ? Number(orderRequest.get("notional")!) : undefined;
-        try {
-            const orderResponse = createOrder({
-                symbol: symbol,
-                side: side,
-                type: type,
-                time_in_force: time_in_force,
-                qty: qty,
-                notional: notional,
-            }).unwrap();
-            console.log(orderResponse)
-            setSuccessMessage("Order entered successfully!")
-        } catch (err: any) {
-            console.log(err)
-            setErrorMessage(handleError(err))
-        }
+        createOrder({
+            symbol: symbol,
+            side: side,
+            type: type,
+            time_in_force: time_in_force,
+            qty: qty,
+            notional: notional,
+        }).unwrap()
+            .then((orderResponse) => {
+                console.log(orderResponse)
+                setSuccessMessage("Order entered successfully!")
+            })
+            .catch((err) => {
+                console.log(err)
+                setErrorMessage(handleError(err))
+            });
     }
+
 
 
     const orderTypes = ["MARKET", "LIMIT"];

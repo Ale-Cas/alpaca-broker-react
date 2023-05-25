@@ -4,6 +4,7 @@ import BasePage from "./BasePage";
 import { DataGrid } from '@mui/x-data-grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useActivitiesQuery } from "../services/accountsApi";
+import { formatDate } from "../utils/dateUtils";
 
 export default function ActivitiesPage() {
     const { data: activities, isLoading } = useActivitiesQuery();
@@ -19,7 +20,7 @@ export default function ActivitiesPage() {
         // processing the activity type to show deposit / withdrawal instead of JNLC
         // and Order instead of FILL
         activity_name: activity.activity_name,
-        date: activity.date,
+        date: formatDate(activity.date),
         amount: `$ ${Math.abs(activity.amount)}`,
     })) : [];
 
