@@ -43,6 +43,7 @@ export const api = createApi({
         "Activities",
         "Assets",
         "Bars",
+        "Positions",
         "PortfolioHistory",
         "Orders"
     ],

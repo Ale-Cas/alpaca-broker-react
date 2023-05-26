@@ -65,6 +65,10 @@ export const lineChartSize = {
     width: "100%",
     height: "400px",
 }
+export const pieChartSize = {
+    width: "100%",
+    height: "400px",
+}
 
 export const pieChartOptions = {
     is3D: true,
