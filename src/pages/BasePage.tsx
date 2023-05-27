@@ -79,7 +79,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const BasePage = ({ children }: { children: JSX.Element }) => {
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(true);
 
     const theme = useTheme();
     const iconStyle = { width: "32px", height: "32px" };
