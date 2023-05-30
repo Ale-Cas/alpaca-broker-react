@@ -83,7 +83,7 @@ export default function TradeCard() {
 
     return (
         <Box>
-            <Card variant="elevation">
+            <Card variant="elevation" sx={{ borderRadius: 10 }}>
                 <CardContent sx={{ padding: 5 }}>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <Typography variant="h6" sx={{ flexGrow: 1, fontFamily: "-apple-system" }}>

@@ -13,12 +13,12 @@ export default function BalanceCard({ description, value }: BalanceCardProps) {
 
     return (
         <Box>
-            <Card>
+            <Card sx={{ borderRadius: 5, padding: 1 }}>
                 <CardContent>
-                    <Typography variant="h6" sx={{ flexGrow: 1, fontFamily: "-apple-system" }}>
+                    <Typography variant="h6" sx={{ flexGrow: 1, marginLeft: 3, fontFamily: "-apple-system" }}>
                         {description}
                     </Typography>
-                    <Typography variant="h4" sx={{ flexGrow: 1, fontFamily: "-apple-system" }}>
+                    <Typography variant="h4" sx={{ flexGrow: 1, marginLeft: 3, fontFamily: "-apple-system" }}>
                         {value ? `$ ${value.toFixed(2)}` : <Skeleton variant="rounded" width={100} />}
                     </Typography>
                 </CardContent>

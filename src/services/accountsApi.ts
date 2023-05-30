@@ -4,7 +4,15 @@ export interface AccountTrading {
     equity: number;
     cash: number;
     buying_power: number;
+}
 
+interface Identity {
+    given_name: string;
+    family_name: string;
+}
+
+export interface AccountInfo {
+    identity: Identity
 }
 
 export interface Activity {
@@ -24,6 +32,13 @@ export const accountsApi = api.injectEndpoints({
             }),
             providesTags: ["AccountTrading"]
         }),
+        accountInfo: builder.query<AccountInfo, void>({
+            query: () => ({
+                url: router,
+                method: "GET",
+            }),
+            providesTags: ["AccountInfo"]
+        }),
         portfolioHistory: builder.query<[string, string | number][], void>({
             query: () => ({
                 url: router + "portfolio/history",
@@ -41,4 +56,4 @@ export const accountsApi = api.injectEndpoints({
     }),
 });
 
-export const { useAccountTradingQuery, usePortfolioHistoryQuery, useActivitiesQuery } = accountsApi;
+export const { useAccountTradingQuery, usePortfolioHistoryQuery, useActivitiesQuery, useAccountInfoQuery } = accountsApi;

@@ -53,7 +53,7 @@ export default function PositionsPage() {
     var pieData: any[][] | undefined = undefined;
 
     const positionsToRows = (positions: Position[]) => positions.map((position, index) => ({
-        id: index,
+        id: index + 1,
         symbol: position.symbol,
         qty: position.qty,
         market_value: `$ ${Number(position.market_value).toFixed(2)}`,
@@ -81,7 +81,6 @@ export default function PositionsPage() {
         setOpenDialog(true);
         if (rows.length > 0) {
             const symbol = rows.filter((row) => row.id === id)[0].symbol;
-            console.log(symbol)
             setClosePositionSymbol(symbol)
         }
     };
@@ -97,12 +96,11 @@ export default function PositionsPage() {
 
             return { symbol: symbol, weight: weight };
         });
-        var pieData: any[][] | undefined = [["Symbol", "Weight"]];
+        pieData = [["Symbol", "Weight"]];
         weights.forEach((position) => {
             const { symbol, weight } = position;
             pieData!.push([symbol, weight]);
         });
-        console.log(pieData)
     }
 
 

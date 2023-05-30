@@ -39,6 +39,7 @@ export const handleError = (err: any) => {
 export const api = createApi({
     baseQuery: baseQuery,
     tagTypes: [
+        "AccountInfo",
         "AccountTrading",
         "Activities",
         "Assets",
