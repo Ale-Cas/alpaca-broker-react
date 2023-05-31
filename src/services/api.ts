@@ -26,7 +26,9 @@ export const handleError = (err: any) => {
         return "Invalid authentication credentials. Try to login again."
     }
     else if (err.status === 422) {
-        return "There is an error in the request parameters."
+        if (err.data.detail !== "No symbol provided") {
+            return "There is an error in the request parameters."
+        }
     }
     else if (err.status === 403) {
         return toTitleCase(err.data)

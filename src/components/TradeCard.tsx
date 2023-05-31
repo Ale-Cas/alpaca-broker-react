@@ -13,14 +13,19 @@ import { useState } from "react";
 import { useOrderMutation } from "../services/ordersApi";
 import { handleError } from "../services/api";
 import Alert from "@mui/material/Alert";
+import Chip from "@mui/material/Chip";
+import { useLatestQuoteQuery } from "../services/pricesApi";
 
 
 export default function TradeCard() {
 
     const [symbol, setSymbol] = useState("AAPL");
 
+    const { data: quote, isError: quoteError } = useLatestQuoteQuery(symbol);
+
     const [buyChecked, setBuyChecked] = useState(true);
     const [sellChecked, setSellChecked] = useState(false);
+    const [amount, setAmount] = useState<undefined | number>(undefined);
 
     const handleBuyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSellChecked(!event.target.checked);
@@ -76,7 +81,11 @@ export default function TradeCard() {
             });
     }
 
-
+    const _price = quote ? buyChecked ? quote.bid_price : quote.ask_price : undefined;
+    const latestPrice = quote ? buyChecked ? "Bid price $ " + quote.bid_price : "Ask price $ " + quote.ask_price : undefined;
+    const estimated = _price && amount ?
+        qtyChecked ? "Estimated order value $ " + (Number(_price) * amount).toFixed(2) : "Estimated number of shares " + (amount / Number(_price)).toFixed(9)
+        : undefined;
 
     const orderTypes = ["MARKET", "LIMIT"];
     const timeInForce = ["DAY", "GTC", "IOC",];
@@ -157,9 +166,14 @@ export default function TradeCard() {
                                 name={qtyChecked ? "qty" : "notional"}
                                 type="number"
                                 label={qtyChecked ? "Number of shares" : "Dollar amount"}
+                                onChange={(event) => setAmount(Number(event.target.value))}
                                 helperText="Please enter a positive amount"
                                 sx={{ ml: 6, mt: 3 }}
                             />
+                            <Stack spacing={1}>
+                                {latestPrice && <Chip label={latestPrice} variant="outlined" />}
+                                {estimated && <Chip label={estimated} variant="outlined" />}
+                            </Stack>
                             {successMessage && <Alert severity='success'>{successMessage} </Alert>}
                             {errorMessage && <Alert severity='error'>{errorMessage} </Alert>}
                             <Button

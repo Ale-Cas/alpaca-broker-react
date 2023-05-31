@@ -22,12 +22,12 @@ import { useAssetsQuery } from "../services/assetsApi";
 import Card from "@mui/material/Card";
 import { useGetOrdersQuery } from "../services/ordersApi";
 import { formatDate } from "../utils/dateUtils";
+import PageHeader from "../components/PageHeader";
 
 
 export default function HomePage() {
 
     const { data: portfolioHistory } = usePortfolioHistoryQuery();
-
     const { data: accountInfo } = useAccountInfoQuery();
     const { data: accountBalances } = useAccountTradingQuery();
     const { data: positions } = useGetPositionsQuery();
@@ -62,8 +62,8 @@ export default function HomePage() {
                         <Typography
                             sx={{ display: 'inline' }}
                             component="span"
-                            variant="h4"
-                            color="text.primary"
+                            variant="h5"
+                            color="yellow"
                         >
                             {position.symbol}
                         </Typography>
@@ -72,6 +72,7 @@ export default function HomePage() {
                     secondary={
                         <Grid container spacing={0.1} sx={{ marginTop: .4 }}>
                             <ListItemDetail description="Number of Shares" value={position.qty} precision={5} />
+                            <ListItemDetail description="Cost Basis" value={position.cost_basis} addDollarSign={true} precision={2} />
                             <ListItemDetail description="Market Value" value={position.market_value} addDollarSign={true} precision={2} />
                             <ListItemDetail description="Profit & Loss" value={position.unrealized_pl} addDollarSign={true} precision={2} />
                         </Grid>
@@ -83,79 +84,68 @@ export default function HomePage() {
         )
     }) : <Skeleton variant="rounded" />;
 
-    const orderListItem = todaysOrders.length > 0 ? todaysOrders.map((order, index) => {
+    const orderListItem = orders && todaysOrders ?
 
-        const name = assets?.filter((asset) => asset.symbol === order.symbol)[0].name
-        const orderAmount = order.notional ?
-            "$ " + Number(order.notional).toFixed(2) :
-            order.filled_at ?
-                "$ " + (Number(order.filled_avg_price) * Number(order.filled_qty)).toFixed(2)
-                : ""
+        // check if there were no orders today
+        todaysOrders.length === 0 ?
+            <Typography sx={{ alignSelf: "center" }}>
+                No orders were submitted today
+            </Typography>
 
-        const orderQty = order.qty ? order.qty.toString() : order.filled_qty || "";
+            // display today's orders
+            : todaysOrders.map((order, index) => {
 
-        return (
-            <ListItem key={index} sx={{ border: 0.1, borderRadius: 5, marginBottom: 3, }}>
-                <ListItemAvatar>
-                    <Avatar src={"http://localhost:8000/logos/" + order.symbol} alt={order.symbol} />
-                </ListItemAvatar>
-                <ListItemText primary={
-                    <Stack>
-                        {name && <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="h6"
-                            color="text.primary"
-                        >
-                            {name}
-                        </Typography>}
-                        <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="h4"
-                            color="text.primary"
-                        >
-                            {order.symbol}
-                        </Typography>
-                    </Stack>
-                }
-                    secondary={
-                        <Grid container spacing={0.1} sx={{ marginTop: .4 }}>
-                            <ListItemDetail description="Number of Shares" value={orderQty} precision={5} />
-                            <ListItemDetail description="Created at" value={formatDate(order.created_at)} />
-                            <ListItemDetail description="Side" value={order.side} />
-                            <ListItemDetail description="Status" value={order.status} />
-                        </Grid>
-                    }
+                const name = assets?.filter((asset) => asset.symbol === order.symbol)[0].name
 
-                />
+                const orderQty = order.qty ? order.qty.toString() : order.filled_qty || "";
 
-            </ListItem>
-        )
-    }) : <Skeleton variant="rounded" />;
+                return (
+                    <ListItem key={index} sx={{ border: 0.1, borderRadius: 5, marginBottom: 3, }}>
+                        <ListItemAvatar>
+                            <Avatar src={"http://localhost:8000/logos/" + order.symbol} alt={order.symbol} />
+                        </ListItemAvatar>
+                        <ListItemText primary={
+                            <Stack>
+                                {name && <Typography
+                                    sx={{ display: 'inline' }}
+                                    component="span"
+                                    variant="h6"
+                                    color="text.primary"
+                                >
+                                    {name}
+                                </Typography>}
+                                <Typography
+                                    sx={{ display: 'inline' }}
+                                    component="span"
+                                    variant="h5"
+                                    color="yellow"
+                                >
+                                    {order.symbol}
+                                </Typography>
+                            </Stack>
+                        }
+                            secondary={
+                                <Grid container spacing={0.1} sx={{ marginTop: .4 }}>
+                                    <ListItemDetail description="Number of Shares" value={orderQty} precision={5} />
+                                    <ListItemDetail description="Created at" value={formatDate(order.created_at)} />
+                                    <ListItemDetail description="Side" value={order.side} />
+                                    <ListItemDetail description="Status" value={order.status} />
+                                </Grid>
+                            }
+
+                        />
+
+                    </ListItem>
+                )
+            }) : <Skeleton variant="rounded" />;
+
+    const welcomeMessage = accountInfo ? `Welcome back, ${accountInfo.identity.given_name}!` : undefined;
 
     return (
         <BasePage>
             <Box sx={{ ml: 5, }}>
                 <CssBaseline />
-                <Stack sx={{ marginBottom: 3 }}>
-                    <Typography
-                        sx={{ fontWeight: "bold" }}
-                        component="span"
-                        variant="h4"
-                        color="yellow"
-                    >
-                        {accountInfo ? `Welcome back, ${accountInfo.identity.given_name}!` : <Skeleton />}
-                    </Typography>
-                    <Typography
-
-                        component="span"
-                        variant="h6"
-                        color="text.primary"
-                    >
-                        Here you can see an overview of your account.
-                    </Typography>
-                </Stack>
+                <PageHeader title={welcomeMessage} subtitle="Here you can see an overview of your account." />
                 <Grid container spacing={5} sx={{ marginBottom: 3 }}>
                     <Grid item xs={8}>
                         <Box>
